@@ -1,0 +1,26 @@
+.env
+Backend/.env
+
+# Exclude backend utility/test scripts
+Backend/ingest_all_context.py
+Backend/reset_milvus.py
+Backend/test.py
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Node root
+node_modules/
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
