@@ -1,26 +1,41 @@
 #!/bin/bash
 
 sudo apt update
-sudo apt install python3 python3-pip nodejs npm git -y
+sudo apt install python3 python3-pip python3-venv nodejs npm git -y
 
-# Clone project
-git clone https://github.com/SaiGeetesh23/TBP.git
+# If project already exists, don't clone again
+if [ ! -d "TBP" ]; then
+    git clone https://github.com/SaiGeetesh23/TBP.git
+fi
+
 cd TBP
 
-# BACKEND (Python)
+# PYTHON BACKEND
 cd Backend
-pip3 install -r ../requirements.txt
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+pip install --upgrade pip
+pip install -r ../requirements.txt
 
 # Run backend
-nohup python3 main.py > backend.log 2>&1 &
+nohup python main.py > backend.log 2>&1 &
 
-# FRONTEND (Next.js)
 cd ../frontend
+
+# Install frontend dependencies
 npm install
+
+# Build frontend
 npm run build
 
-# Run frontend
+# Install PM2
 sudo npm install -g pm2
+
+# Run frontend
+pm2 delete frontend || true
 pm2 start npm --name frontend -- start
 
 pm2 save
