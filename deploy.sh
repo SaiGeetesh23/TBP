@@ -1,21 +1,26 @@
 #!/bin/bash
 
 sudo apt update
-sudo apt install nodejs npm git nginx -y
+sudo apt install python3 python3-pip nodejs npm git -y
 
+# Clone project
 git clone https://github.com/SaiGeetesh23/TBP.git
 cd TBP
 
-# Backend
-cd backend
-npm install
-sudo npm install -g pm2
-pm2 start server.js --name floatchat-backend
+# BACKEND (Python)
+cd Backend
+pip3 install -r ../requirements.txt
 
-# Frontend
+# Run backend
+nohup python3 main.py > backend.log 2>&1 &
+
+# FRONTEND (Next.js)
 cd ../frontend
 npm install
 npm run build
-sudo cp -r build/* /var/www/html/
 
-sudo systemctl restart nginx
+# Run frontend
+sudo npm install -g pm2
+pm2 start npm --name frontend -- start
+
+pm2 save
